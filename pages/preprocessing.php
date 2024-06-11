@@ -46,6 +46,7 @@
                                     <th>Cleaning</th>
                                     <th>Tokenizing</th>
                                     <th>Stopword</th>
+                                    <th>Normalisasi</th>
                                     <th>Stemming</th>
                                 </tr>
                             </thead>
@@ -77,6 +78,7 @@ if (!file_exists($file_path)) {
             echo '<td>' . (isset($row[5]) ? $row[5] : '') . '</td>';
             echo '<td>' . (isset($row[7]) ? $row[7] : '') . '</td>';
             echo '<td>' . (isset($row[8]) ? $row[8] : '') . '</td>';
+            echo '<td>' . (isset($row[8]) ? $row[9] : '') . '</td>';
             echo '</tr>';
         }
     }
