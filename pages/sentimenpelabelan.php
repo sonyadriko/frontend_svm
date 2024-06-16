@@ -80,11 +80,11 @@
                     ?>
                     <?php
 // Mengambil respons JSON dari Flask menggunakan file_get_contents
-$url = "http://localhost:5000/sentimen-pelabelan"; // Sesuaikan URL dengan alamat Flask Anda
-$data_json = file_get_contents($url);
+// $url = "http://localhost:5000/sentimen-pelabelan"; // Sesuaikan URL dengan alamat Flask Anda
+// $data_json = file_get_contents($url);
 
-// Mengubah JSON menjadi array asosiatif PHP
-$data_array = json_decode($data_json, true);
+// // Mengubah JSON menjadi array asosiatif PHP
+// $data_array = json_decode($data_json, true);
 
 // Menampilkan data
 // echo "<pre>";

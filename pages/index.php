@@ -51,3 +51,21 @@
 </body>
 
 </html>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var currentPath = window.location.pathname;
+    var currentPage = currentPath.split('/').pop();
+
+    var sidebarItems = document.querySelectorAll('.menu .nav-item');
+
+    sidebarItems.forEach(function(item) {
+        var link = item.querySelector('.nav-link');
+        var href = link.getAttribute('href');
+
+        // Memeriksa apakah href di sidebar cocok dengan halaman yang sedang dibuka
+        if (currentPage === href) {
+            item.classList.add('active');
+        }
+    });
+});
+</script>

@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo 'Error:' . curl_error($ch);
             } else {
                 // Tampilkan respons dari server
-                echo $response;
+                // echo $response;
             }
 
             // Tutup cURL session

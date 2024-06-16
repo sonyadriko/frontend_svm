@@ -45,6 +45,14 @@
                         <input type="text" id="complexity" name="complexity" required
                             class="block w-full border border-gray-300 rounded-md py-2 px-3"><br><br>
 
+                        <label for="complexity" class="block">Data Testing:</label>
+                        <select id="test_size" name="test_size" class="form-select mb-4">
+                            <?php for ($i = 1; $i <= 9; $i++) : ?>
+                            <option value="<?php echo $i / 10; ?>">
+                                <?php echo "Data Testing " . $i / 10 . " - Data Training " . (1 - $i / 10); ?></option>
+                            <?php endfor; ?>
+                        </select>
+
                         <button type="submit" class="btn btn-primary py-2 px-4 rounded">Submit</button>
                         <br>
                     </form>
@@ -53,8 +61,9 @@ if (isset($_GET['gamma']) && isset($_GET['lambda']) && isset($_GET['complexity']
     $gamma = htmlspecialchars($_GET['gamma']);
     $lambda = htmlspecialchars($_GET['lambda']);
     $complexity = htmlspecialchars($_GET['complexity']);
+    $test_size = $_GET['test_size'];
     
-    $url = "http://127.0.0.1:5000/svm?gamma=" . urlencode($gamma) . "&lambda=" . urlencode($lambda) . "&complexity=" . urlencode($complexity);
+    $url = "http://127.0.0.1:5000/svm?gamma=" . urlencode($gamma) . "&lambda=" . urlencode($lambda) . "&complexity=" . urlencode($complexity) . "&test_size=" . $test_size;
 
     $curl = curl_init();
 

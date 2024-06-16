@@ -5,6 +5,7 @@
     <title>Preprocessing</title>
     <?php include '../includes/script.php' ?>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body x-data="main" class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased" :class="[$store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ? 'dark' : '',
@@ -72,13 +73,12 @@ if (!file_exists($file_path)) {
         foreach ($preprocessing_data as $row) {
             echo '<tr>';
             echo '<td>' . (isset($row[0]) ? $row[0] : '') . '</td>';
+            echo '<td>' . (isset($row[2]) ? $row[2] : '') . '</td>';
             echo '<td>' . (isset($row[3]) ? $row[3] : '') . '</td>';
-            // echo '<td>' . $row[] . '</td>'; // Jika ada kolom lain yang ingin ditampilkan
             echo '<td>' . (isset($row[4]) ? $row[4] : '') . '</td>';
-            echo '<td>' . (isset($row[5]) ? $row[5] : '') . '</td>';
+            echo '<td>' . (isset($row[6]) ? $row[6] : '') . '</td>';
             echo '<td>' . (isset($row[7]) ? $row[7] : '') . '</td>';
             echo '<td>' . (isset($row[8]) ? $row[8] : '') . '</td>';
-            echo '<td>' . (isset($row[8]) ? $row[9] : '') . '</td>';
             echo '</tr>';
         }
     }
@@ -100,32 +100,61 @@ if (!file_exists($file_path)) {
     <?php include '../includes/js.php'  ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
     $(document).ready(function() {
         $('#dataTable').DataTable();
     });
-    </script>
 
-    <script>
     // Fungsi untuk memulai proses preprocessing saat tombol ditekan
     document.getElementById("preprocessingButton").addEventListener("click", function() {
+        // Tampilkan loading
+        Swal.fire({
+            title: 'Processing',
+            text: 'Please wait...',
+            icon: 'info',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         // Buat permintaan POST ke endpoint /preprocessing pada server Flask
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://127.0.0.1:5000/preprocessing", true);
 
         xhr.onload = function() {
+            Swal.close(); // Tutup loading
             if (xhr.status == 200) {
                 // Tampilkan pesan berhasil jika proses berhasil
-                alert("Proses preprocessing berhasil!");
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Proses preprocessing berhasil!',
+                    icon: 'success'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload(); // Reload halaman saat tombol OK ditekan
+                    }
+                });
             } else {
                 // Tampilkan pesan error jika terjadi kesalahan
-                alert("Terjadi kesalahan saat melakukan preprocessing: " + xhr.statusText);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Terjadi kesalahan saat melakukan preprocessing: ' + xhr.statusText,
+                    icon: 'error'
+                });
             }
         };
 
         xhr.onerror = function() {
+            Swal.close(); // Tutup loading
             // Tampilkan pesan error jika terjadi kesalahan jaringan
-            alert("Terjadi kesalahan jaringan saat melakukan preprocessing.");
+            Swal.fire({
+                title: 'Network Error',
+                text: 'Terjadi kesalahan jaringan saat melakukan preprocessing.',
+                icon: 'error'
+            });
         };
 
         xhr.send();

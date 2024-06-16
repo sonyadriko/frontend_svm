@@ -5,6 +5,7 @@
     <title>TF IDF</title>
     <?php include '../includes/script.php' ?>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body x-data="main" class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased" :class="[$store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ? 'dark' : '',
@@ -34,12 +35,13 @@
             <!-- start main content section -->
             <div class="animate__animated p-6" :class="[$store.app.animation]">
                 <div style="overflow-x: auto;">
-                    <button id="preprocessingButton" class="btn btn-primary">Mulai Perhitungan TF IDF</button><br>
+                    <button id="tfidfButton" class="btn btn-primary">Mulai Perhitungan TF IDF</button><br>
                     <!-- <div id="tfidfData"></div> -->
                     <?php
                     
                     // Nama file CSV
-                    $csvFile = '../../backend/hasil_vector_matrix.csv';
+                    // $csvFile = '../../backend/tfidf_vectors.csv';
+                    $csvFile = '../../backend/pelabelan.csv';
                     
                     // Periksa apakah file CSV ada
                     if (file_exists($csvFile)) {
@@ -94,32 +96,62 @@
     <?php include '../includes/js.php'  ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
     $(document).ready(function() {
         $('#dataTable').DataTable();
     });
-    </script>
 
-    <script>
-    // Fungsi untuk memulai proses preprocessing saat tombol ditekan
-    document.getElementById("preprocessingButton").addEventListener("click", function() {
-        // Buat permintaan POST ke endpoint /preprocessing pada server Flask
+    // Fungsi untuk memulai proses TF IDF saat tombol ditekan
+    document.getElementById("tfidfButton").addEventListener("click", function() {
+        // Tampilkan loading
+        Swal.fire({
+            title: 'Processing',
+            text: 'Please wait...',
+            icon: 'info',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Buat permintaan GET ke endpoint /tf-idf-3 pada server Flask
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://127.0.0.1:5000/tf-idf-2", true);
+        // xhr.open("GET", "http://127.0.0.1:5000/tf-idf-2", true);
+        xhr.open("GET", "http://127.0.0.1:5000/tfidf-and-sentiment-labeling", true);
 
         xhr.onload = function() {
+            Swal.close(); // Tutup loading
             if (xhr.status == 200) {
                 // Tampilkan pesan berhasil jika proses berhasil
-                alert("Proses TF IDF berhasil!");
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Proses TF IDF berhasil!',
+                    icon: 'success'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload(); // Reload halaman saat tombol OK ditekan
+                    }
+                });
             } else {
                 // Tampilkan pesan error jika terjadi kesalahan
-                alert("Terjadi kesalahan saat melakukan tf idf: " + xhr.statusText);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Terjadi kesalahan saat melakukan TF IDF: ' + xhr.statusText,
+                    icon: 'error'
+                });
             }
         };
 
         xhr.onerror = function() {
+            Swal.close(); // Tutup loading
             // Tampilkan pesan error jika terjadi kesalahan jaringan
-            alert("Terjadi kesalahan jaringan saat melakukan preprocessing.");
+            Swal.fire({
+                title: 'Network Error',
+                text: 'Terjadi kesalahan jaringan saat melakukan TF IDF.',
+                icon: 'error'
+            });
         };
 
         xhr.send();
