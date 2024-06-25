@@ -95,6 +95,8 @@
                         }
                     }
                     ?>
+                    <div id="summary" class="mt-4 mb-4"></div>
+
                     <div id="data-container" class="table-responsive"></div>
 
                     <button onclick="deleteExcelFile()" class="btn btn-danger mt-4">Delete Excel File</button>
@@ -176,8 +178,9 @@
 
         xhr.onload = function() {
             if (xhr.status == 200) {
-                var data = JSON.parse(xhr.responseText);
-                displayData(data);
+                var result = JSON.parse(xhr.responseText);
+                displayData(result.data);
+                displaySummary(result.positif_count, result.negatif_count);
             } else {
                 console.error("Error fetching data: " + xhr.statusText);
             }
@@ -199,10 +202,11 @@
     function displayData(data) {
         var container = document.getElementById("data-container");
         var html =
-            "<h1>Data Training</h1><table id='dataTable' class='table table-bordered'><thead><tr><th>No.</th><th>Data</th></tr></thead><tbody>";
+            "<h1>Data Training</h1><table id='dataTable' class='table table-bordered'><thead><tr><th>No.</th><th>Data</th><th>Status</th></tr></thead><tbody>";
 
         data.forEach(function(item, index) {
-            html += "<tr><td>" + (index + 1) + "</td><td>" + item + "</td></tr>";
+            html += "<tr><td>" + (index + 1) + "</td><td>" + item.rawContent + "</td><td>" + item.status +
+                "</td></tr>";
         });
 
         html += "</tbody></table>";
@@ -212,6 +216,13 @@
         $(document).ready(function() {
             $('#dataTable').DataTable();
         });
+    }
+
+    // Function to display summary
+    function displaySummary(positifCount, negatifCount) {
+        var summaryContainer = document.getElementById("summary");
+        var html = "<p>Positif: " + positifCount + " data</p><p>Negatif: " + negatifCount + " data</p>";
+        summaryContainer.innerHTML = html;
     }
 
     // Call fetchData function when page loads
