@@ -36,6 +36,51 @@
             <div class="animate__animated p-6" :class="[$store.app.animation]">
                 <div style="overflow-x: auto;">
                     <button id="tfidfButton" class="btn btn-primary">Mulai Perhitungan TF IDF</button><br>
+                    <?php
+    // Endpoint yang akan diambil datanya
+    $endpoint = 'http://localhost:5000/perhitungan'; // Sesuaikan dengan URL Flask Anda
+
+    // Mengambil data dari endpoint menggunakan cURL
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $endpoint);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    // Parsing respons JSON
+    $data = json_decode($response, true);
+
+    // Menampilkan data sesuai dengan struktur yang diinginkan
+    if ($data) {
+        // Misalnya, menampilkan fitur kata
+        // echo "<h2>Fitur Kata:</h2>";
+        // echo "<ul>";
+        // foreach ($data['fitur_kata'] as $fitur) {
+        //     echo "<li>$fitur</li>";
+        // }
+        // echo "</ul>";
+
+        // Menampilkan TF
+        // echo "<h2>TF:</h2>";
+        // echo "<ul>";
+        // foreach ($data['tf'] as $tf) {
+        //     echo "<li>" . implode(", ", $tf) . "</li>";
+        // }
+        // echo "</ul>";
+
+        // Menampilkan WTF
+        echo "<h2>WTF:</h2>";
+        echo "<ul>";
+        foreach ($data['tfidf'] as $wtf) {
+            echo "<li>" . implode(", ", $wtf) . "</li>";
+        }
+        echo "</ul>";
+
+        // Menampilkan lainnya seperti DF, IDF, TFIDF, bobot lexicon, skor lexicon, dll.
+    } else {
+        echo "<p>Gagal memuat data.</p>";
+    }
+    ?>
                     <!-- <div id="tfidfData"></div> -->
                     <?php
                     
