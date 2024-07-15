@@ -123,6 +123,7 @@ if (!file_exists($file_path)) {
         // Buat permintaan POST ke endpoint /preprocessing pada server Flask
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://127.0.0.1:5000/preprocessing", true);
+        // xhr.open("GET", "http://127.0.0.1:5000/preprocessingbaru", true);
 
         xhr.onload = function() {
             Swal.close(); // Tutup loading

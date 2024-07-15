@@ -13,7 +13,7 @@
         <label for="d">Parameter d:</label>
         <input type="number" id="d" name="d" value="3"><br><br>
         <label for="itermax">Max Iterations:</label>
-        <input type="number" id="itermax" name="itermax" value="1000"><br><br>
+        <input type="number" id="itermax" name="itermax" value="100"><br><br>
         <label for="lr">Learning Rate:</label>
         <input type="number" step="0.01" id="lr" name="lr" value="0.01"><br><br>
         <input type="submit" value="Submit">
