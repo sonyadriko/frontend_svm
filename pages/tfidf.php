@@ -38,7 +38,8 @@
                     <button id="tfidfButton" class="btn btn-primary">Mulai Perhitungan TF IDF</button><br>
                     <?php
     // Endpoint yang akan diambil datanya
-    $endpoint = 'http://localhost:5000/perhitungan'; // Sesuaikan dengan URL Flask Anda
+    $endpoint = '/perhitungan'; // Sesuaikan dengan URL Flask Anda
+    // $endpoint = 'http://localhost:5000/perhitungan'; // Sesuaikan dengan URL Flask Anda
 
     // Mengambil data dari endpoint menggunakan cURL
     $ch = curl_init();
@@ -78,7 +79,7 @@
 
         // Menampilkan lainnya seperti DF, IDF, TFIDF, bobot lexicon, skor lexicon, dll.
     } else {
-        echo "<p>Gagal memuat data.</p>";
+        // echo "<p>Gagal memuat data.</p>";
     }
     ?>
                     <!-- <div id="tfidfData"></div> -->

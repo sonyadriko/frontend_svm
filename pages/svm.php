@@ -78,14 +78,14 @@ if (isset($_GET['gamma']) && isset($_GET['lambda']) && isset($_GET['complexity']
     if ($data) {
         echo "Accuracy: " . $data['accuracy'] . "<br>";
         echo "Confusion Matrix: <br>";
-        foreach ($data['confusion_matrix'] as $row) {
-            echo implode(' ', $row) . "<br>";
-        }
+        // foreach ($data['confusion_matrix'] as $row) {
+        //     echo implode(' ', $row) . "<br>";
+        // }
         echo "TN: " . $data['tn'] . "<br>";
         echo "FP: " . $data['fp'] . "<br>";
         echo "FN: " . $data['fn'] . "<br>";
         echo "TP: " . $data['tp'] . "<br>";
-        echo "Classification Report: <pre>" . $data['classification_report'] . "</pre><br>";
+        // echo "Classification Report: <pre>" . $data['classification_report'] . "</pre><br>";
         echo "Precision: " . $data['precision'] . "<br>";
         echo "F1 Score: " . $data['f1_score'] . "<br>";
         echo "Recall: " . $data['recall'] . "<br>";
@@ -93,7 +93,7 @@ if (isset($_GET['gamma']) && isset($_GET['lambda']) && isset($_GET['complexity']
         echo "Error: Unable to get data from SVM endpoint.";
     }
 } else {
-    echo "Please submit the form with the required parameters.";
+    echo "Silakan kirimkan formulir dengan parameter yang diperlukan.";
 }
 ?>
 

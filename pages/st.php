@@ -27,14 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = json_decode($result, true);
 
         if ($response && isset($response['sentimen']) && isset($response['kernel_matrix'])) {
-            $predictionResult = "Prediksi Sentimen: " . htmlspecialchars($response['sentimen']) . "<br>";
-            $predictionResult .= "Matriks Kernel: " . htmlspecialchars(json_encode($response['kernel_matrix'])) . "<br>";
+            $sentiment = is_array($response['sentimen']) ? implode(", ", $response['sentimen']) : $response['sentimen'];
+            $kernel_matrix = htmlspecialchars(json_encode($response['kernel_matrix'], JSON_PRETTY_PRINT));
 
-            $alpha_values = isset($response['alpha_values']) ? $response['alpha_values'] : null;
-            $support_vectors = isset($response['support_vectors']) ? $response['support_vectors'] : null;
-
-            // $predictionResult .= "Nilai Alpha (ai): " . htmlspecialchars(json_encode($alpha_values)) . "<br>";
-            // $predictionResult .= "Support Vectors (yi): " . htmlspecialchars(json_encode($support_vectors));
+            $predictionResult = "Prediksi Sentimen: " . $sentiment . "<br>";
+            $predictionResult .= "Matriks Kernel: " . $kernel_matrix . "<br>";
         } else {
             $predictionResult = "Invalid response from the prediction API.";
         }
@@ -64,11 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php include '../includes/header.php'; ?>
             <div class="animate__animated p-6" :class="[$store.app.animation]">
                 <div>
-                    <h1>Sequential SVM Evaluation</h1>
+                    <h1>Sequential SVM Evaluasi</h1>
                     <form id="evaluationForm" method="POST" action="">
-                        <label for="test_data">Test Data:</label><br>
+                        <label for="test_data">Input Data:</label><br>
                         <textarea id="test_data" name="test_data" rows="4" cols="50"></textarea><br>
-                        <button type="submit">Evaluate Model</button>
+                        <button type="submit" class="btn btn-primary mt-2 mb-4">Prediksi Data</button>
                     </form>
                     <div id="predictionResult">
                         <?php
