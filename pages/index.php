@@ -32,6 +32,11 @@
             <!-- start main content section -->
             <div class="animate__animated p-6" :class="[$store.app.animation]">
                 <div>
+                    <h6>Proyek ini bertujuan untuk menganalisis sentimen pengguna terhadap game Mobile Legends dengan
+                        menggunakan algoritma Support Vector Machine (SVM). Mobile Legends adalah salah satu game mobile
+                        paling populer, dan memahami sentimen pengguna dapat memberikan wawasan berharga bagi pengembang
+                        game dan komunitas pemain.</h6>
+                    <br>
                     <h6>Squential training merupakan salah satu algoritma yang digunakan untuk
                         melatih model SVM. Selain Sequential Training , terdapat juga algoritma lain
                         seperti Quadric Progammin dan Squential Minimal Optimization (SMO).
@@ -51,21 +56,3 @@
 </body>
 
 </html>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    var currentPath = window.location.pathname;
-    var currentPage = currentPath.split('/').pop();
-
-    var sidebarItems = document.querySelectorAll('.menu .nav-item');
-
-    sidebarItems.forEach(function(item) {
-        var link = item.querySelector('.nav-link');
-        var href = link.getAttribute('href');
-
-        // Memeriksa apakah href di sidebar cocok dengan halaman yang sedang dibuka
-        if (currentPage === href) {
-            item.classList.add('active');
-        }
-    });
-});
-</script>
