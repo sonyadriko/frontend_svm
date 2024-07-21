@@ -1,25 +1,23 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $testData = trim($_POST['test_data']);
+    $inputText = htmlspecialchars($testData);
 
     if (!empty($testData)) {
         $url = 'http://127.0.0.1:5000/predict';
         $data = json_encode(['text' => $testData]);
 
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($data))
-        );
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Content-Length: ' . strlen($data)]);
 
         $result = curl_exec($ch);
 
         if (curl_errno($ch)) {
             echo 'Error:' . curl_error($ch);
-            exit;
+            exit();
         }
 
         curl_close($ch);
@@ -27,16 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = json_decode($result, true);
 
         if ($response && isset($response['sentimen']) && isset($response['kernel_matrix'])) {
-            $sentiment = is_array($response['sentimen']) ? implode(", ", $response['sentimen']) : $response['sentimen'];
+            $sentiment = is_array($response['sentimen']) ? implode(', ', $response['sentimen']) : $response['sentimen'];
             $kernel_matrix = htmlspecialchars(json_encode($response['kernel_matrix'], JSON_PRETTY_PRINT));
 
-            $predictionResult = "Prediksi Sentimen: " . $sentiment . "<br>";
-            $predictionResult .= "Matriks Kernel: " . $kernel_matrix . "<br>";
+            $predictionResult = 'Prediksi Sentimen: ' . '<strong>' . $sentiment . '</strong>' . '<br>';
+            $predictionResult .= 'Matriks Kernel: ' . $kernel_matrix . '<br>';
         } else {
-            $predictionResult = "Invalid response from the prediction API.";
+            $predictionResult = 'Invalid response from the prediction API.';
         }
     } else {
-        $predictionResult = "Error: Test data is empty.";
+        $predictionResult = 'Error: Test data is empty.';
     }
 }
 ?>
@@ -46,13 +44,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <title>SVM Testing</title>
+    <style>
+    .responsive-text {
+        width: 100%;
+        max-width: 100%;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+    }
+    </style>
     <?php include '../includes/script.php'; ?>
 </head>
 
-<body x-data="main" class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
-    :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ?  'dark' : '', $store.app.menu, $store.app.layout,$store.app.rtlClass]">
+<body x-data="main" class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased" :class="[$store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ? 'dark' : '',
+        $store.app.menu, $store.app.layout, $store.app.rtlClass
+    ]">
     <!-- sidebar menu overlay -->
-    <div x-cloak class="fixed inset-0 z-50 bg-[black]/60 lg:hidden" :class="{'hidden' : !$store.app.sidebar}"
+    <div x-cloak class="fixed inset-0 z-50 bg-[black]/60 lg:hidden" :class="{ 'hidden': !$store.app.sidebar }"
         @click="$store.app.toggleSidebar()"></div>
     <?php include '../includes/button_top.php'; ?>
     <div class="main-container min-h-screen text-black dark:text-white-dark" :class="[$store.app.navbar]">
@@ -61,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php include '../includes/header.php'; ?>
             <div class="animate__animated p-6" :class="[$store.app.animation]">
                 <div>
-                    <h1>Sequential SVM Evaluasi</h1>
+                    <h1>Evaluasi Sequential SVM</h1>
                     <form id="evaluationForm" method="POST" action="">
                         <label for="test_data">Input Data:</label><br>
                         <textarea id="test_data" name="test_data" rows="4" cols="50"></textarea><br>
@@ -69,6 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </form>
                     <div id="predictionResult">
                         <?php
+                        if (isset($inputText)) {
+                            echo "<div class='responsive-text'>Input Text:<br>" . nl2br($inputText) . "</div>";
+                        }
                         if (isset($predictionResult)) {
                             echo $predictionResult;
                         }
@@ -80,18 +95,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php
             // URL dari API yang ingin dikonsumsi
             $url = 'http://127.0.0.1:5000/sequential_svm/train';
-
+            
             // Membuat cURL session
             $ch = curl_init($url);
-
+            
             // Mengatur opsi untuk POST request
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, ''); // Tidak perlu mengirim data karena data diambil dari file CSV di server
-
+            
             // Eksekusi cURL session
             $response = curl_exec($ch);
-
+            
             // Cek jika terjadi error
             if (curl_errno($ch)) {
                 echo 'Error:' . curl_error($ch);
@@ -99,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Tampilkan respons dari server
                 // echo $response;
             }
-
+            
             // Tutup cURL session
             curl_close($ch);
             ?>
