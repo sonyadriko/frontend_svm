@@ -24,17 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $response = json_decode($result, true);
 
-        if ($response && isset($response['sentimen']) && isset($response['kernel_matrix'])) {
+        if ($response && isset($response['sentimen']) && isset($response['kernel_matrix']) && isset($response['preprocess_text'])) {
             $sentiment = is_array($response['sentimen']) ? implode(', ', $response['sentimen']) : $response['sentimen'];
-            $kernel_matrix = htmlspecialchars(json_encode($response['kernel_matrix'], JSON_PRETTY_PRINT));
+            $text = htmlspecialchars($response['preprocess_text'], ENT_QUOTES, 'UTF-8');
+            $kernel_matrix = htmlspecialchars(json_encode($response['kernel_matrix'], JSON_PRETTY_PRINT), ENT_QUOTES, 'UTF-8');
 
-            $predictionResult = 'Prediksi Sentimen: ' . '<strong>' . $sentiment . '</strong>' . '<br>';
+            $predictionResult = 'Hasil preprocessing text: ' . $text . '<br>';
+            $predictionResult .= 'Prediksi Sentimen: <strong>' . $sentiment . '</strong><br>';
             $predictionResult .= 'Matriks Kernel: ' . $kernel_matrix . '<br>';
         } else {
-            $predictionResult = 'Invalid response from the prediction API.';
+            $predictionResult = 'Respons tidak valid dari API prediksi.';
         }
     } else {
-        $predictionResult = 'Error: Test data is empty.';
+        $predictionResult = 'Kesalahan: Data uji kosong.';
     }
 }
 ?>
