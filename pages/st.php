@@ -17,10 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (curl_errno($ch)) {
             echo 'Error:' . curl_error($ch);
+            curl_close($ch);
             exit();
         }
 
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        if ($http_code != 200) {
+            echo 'Error: Unexpected HTTP code: ' . $http_code;
+            exit();
+        }
 
         $response = json_decode($result, true);
 
