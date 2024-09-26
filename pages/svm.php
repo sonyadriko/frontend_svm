@@ -47,9 +47,14 @@
 
                         <label for="complexity" class="block">Data Testing:</label>
                         <select id="test_size" name="test_size" class="form-select mb-4">
-                            <?php for ($i = 1; $i <= 9; $i++) : ?>
+                            <?php for ($i = 1; $i <= 5; $i++) : ?>
                             <option value="<?php echo $i / 10; ?>">
-                                <?php echo "Data Testing " . $i / 10 . " - Data Training " . (1 - $i / 10); ?></option>
+                                <?php 
+            $data_testing_percentage = ($i / 10) * 100;
+            $data_training_percentage = (1 - $i / 10) * 100;
+            echo "Data Testing " . $data_testing_percentage . "% - Data Training " . $data_training_percentage . "%"; 
+            ?>
+                            </option>
                             <?php endfor; ?>
                         </select>
 
@@ -76,7 +81,10 @@ if (isset($_GET['gamma']) && isset($_GET['lambda']) && isset($_GET['complexity']
     $data = json_decode($response, true);
 
     if ($data) {
-        echo "Accuracy: " . $data['accuracy'] . "<br>";
+
+        echo "Total data testing yang digunakan: " . $data['total_data'] . "<br>";
+
+        echo "Accuracy: " . rtrim(rtrim(number_format($data['accuracy'] * 100, 2), '0'), '.') . "%<br>";
         echo "Confusion Matrix: <br>";
         // foreach ($data['confusion_matrix'] as $row) {
         //     echo implode(' ', $row) . "<br>";
@@ -86,9 +94,9 @@ if (isset($_GET['gamma']) && isset($_GET['lambda']) && isset($_GET['complexity']
         echo "FN: " . $data['fn'] . "<br>";
         echo "TP: " . $data['tp'] . "<br>";
         // echo "Classification Report: <pre>" . $data['classification_report'] . "</pre><br>";
-        echo "Precision: " . $data['precision'] . "<br>";
-        echo "F1 Score: " . $data['f1_score'] . "<br>";
-        echo "Recall: " . $data['recall'] . "<br>";
+        echo "Precision: " . rtrim(rtrim(number_format($data['precision'] * 100, 2), '0'), '.') . "%<br>";
+        echo "F1 Score: " . rtrim(rtrim(number_format($data['f1_score'] * 100, 2), '0'), '.') . "%<br>";
+        echo "Recall: " . rtrim(rtrim(number_format($data['recall'] * 100, 2), '0'), '.') . "%<br>";
     } else {
         echo "Error: Unable to get data from SVM endpoint.";
     }
@@ -96,39 +104,6 @@ if (isset($_GET['gamma']) && isset($_GET['lambda']) && isset($_GET['complexity']
     echo "Silakan kirimkan formulir dengan parameter yang diperlukan.";
 }
 ?>
-
-
-                    <!-- <h1>starter kit</h1>
-                    <button id="preprocessingButton">Mulai Proses SVM</button> -->
-                    <?php
-    // Mendapatkan data dari rute KNN menggunakan cURL
-//     $url = 'http://127.0.0.1:5000/svm';
-//  // Mendapatkan respons JSON dari endpoint
-// $response = file_get_contents($url);
-
-// // Mengubah respons JSON menjadi array asosiatif
-// $data = json_decode($response, true);   $response = file_get_contents($url);
-//     $data = json_decode($response, true);
-
-//    // Menampilkan nilai akurasi
-// // Tampilkan hasil dalam tabel
-// echo "<h2>Hasil SVM</h2>";
-
-// echo "<h3>Confusion Matrix:</h3>";
-// echo "<table>";
-// echo "<tr><th></th><th>Predicted Positive</th><th>Predicted Negative</th></tr>";
-// echo "<tr><th>Actual Positive</th><td>" . $data['confusion_matrix'][1][1] . "</td><td>" . $data['confusion_matrix'][1][0] . "</td></tr>";
-// echo "<tr><th>Actual Negative</th><td>" . $data['confusion_matrix'][0][1] . "</td><td>" . $data['confusion_matrix'][0][0] . "</td></tr>";
-// echo "</table>";
-
-// // echo "<h3>Classification Report:</h3>";
-// // echo "<pre>" . $data['classification_report'] . "</pre>";
-
-// echo "<h3>Akurasi: " . $data['accuracy'] . "</h3>";
-// echo "<h3>Precision: " . $data['precision'] . "</h3>";
-// echo "<h3>F1 Score: " . $data['f1_score'] . "</h3>";
-// echo "<h3>Recall: " . $data['recall'] . "</h3>";
-    ?>
                 </div>
             </div>
             <!-- end main content section -->
